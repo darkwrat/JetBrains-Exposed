@@ -9,6 +9,9 @@ Exposed is currently available for maven/gradle builds at https://bintray.com/ko
 ## SQL DSL sample:
 ```kotlin
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.SchemaUtils.create
+import org.jetbrains.exposed.sql.SchemaUtils.drop
 
 object Users : Table() {
     val id = varchar("id", 10).primaryKey() // Column<String>
@@ -158,6 +161,8 @@ Outputs:
 ## DAO sample
 ```kotlin
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.dao.*
 
 object Users : IntIdTable() {
