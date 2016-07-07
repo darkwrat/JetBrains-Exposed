@@ -31,7 +31,9 @@ enum class TestDB(val dialect: DatabaseDialect, val connection: String, val driv
                 }
             }),
     POSTGRESQL(PostgreSQLDialect, "jdbc:postgresql://localhost:12346/template1?user=root&password=root", "org.postgresql.Driver",
-            beforeConnection = { postgresSQLProcess.start() }, afterConnection = { postgresSQLProcess.stop() });
+            beforeConnection = { postgresSQLProcess.start() }, afterConnection = { postgresSQLProcess.stop() }),
+
+    SQLITE(SqliteDialect, "jdbc:sqlite:memory", "org.sqlite.JDBC", {Unit}, {});
 
     companion object {
         fun enabledInTests(): List<TestDB> {

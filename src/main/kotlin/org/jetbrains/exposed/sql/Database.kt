@@ -6,6 +6,7 @@ import org.jetbrains.exposed.sql.vendors.DatabaseDialect
 import org.jetbrains.exposed.sql.vendors.H2Dialect
 import org.jetbrains.exposed.sql.vendors.MysqlDialect
 import org.jetbrains.exposed.sql.vendors.PostgreSQLDialect
+import org.jetbrains.exposed.sql.vendors.SqliteDialect
 import java.sql.Connection
 import java.sql.DatabaseMetaData
 import java.sql.DriverManager
@@ -40,6 +41,7 @@ class Database private constructor(val connector: () -> Connection) {
             registerDialect(H2Dialect)
             registerDialect(MysqlDialect)
             registerDialect(PostgreSQLDialect)
+            registerDialect(SqliteDialect)
         }
 
         fun registerDialect(dialect: DatabaseDialect) {

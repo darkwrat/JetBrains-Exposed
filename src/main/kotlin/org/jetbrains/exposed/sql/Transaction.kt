@@ -47,7 +47,7 @@ open class Transaction(private val transactionImpl: TransactionInterface): UserD
     var statementCount: Int = 0
     var duration: Long = 0
     var warnLongQueriesDuration: Long = 2000
-    var debug = false
+    var debug = true
     var selectsForUpdate = false
 
     val statements = StringBuilder()
@@ -55,7 +55,7 @@ open class Transaction(private val transactionImpl: TransactionInterface): UserD
     val statementStats = hashMapOf<String, Pair<Int,Long>>()
 
     init {
-        logger.addLogger(Slf4jSqlLogger())
+        logger.addLogger(StdOutSqlLogger())
     }
 
 

@@ -45,6 +45,7 @@ repositories {
 
 dependencies {
     testCompile "mysql:mysql-connector-mxj:5.0.12"
+    testCompile "org.xerial:sqlite-jdbc:3.8.11.2"
     testCompile 'org.postgresql:postgresql:9.4.1208.jre7'
     testCompile 'ru.yandex.qatools.embed:postgresql-embedded:1.13'
 }

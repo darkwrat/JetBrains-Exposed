@@ -37,8 +37,9 @@ abstract class Statement<T>(val type: StatementType, val targets: List<Table>) {
 
             val statement = transaction.prepareStatement(prepareSQL(transaction), autoInc?.map { transaction.identity(it)})
             contexts.forEach { context ->
-                statement.fillParameters(context.args)
-                statement.addBatch()
+                if (statement.fillParameters(context.args) > 1) {
+                    statement.addBatch()
+                }
             }
 
             val result = statement.executeInternal(transaction)
