@@ -491,11 +491,22 @@ abstract class EntityClass<ID : Any, out T: Entity<ID>>(val table: IdTable<ID>) 
     }
 
     open fun forEntityIds(ids: List<EntityID<ID>>) : SizedIterable<T> {
-        val cached = ids.map { testCache(it) }.filterNotNull()
-        if (cached.size == ids.size) {
+        val distinctIds = ids.distinct()
+        if (distinctIds.isEmpty()) return emptySized()
+
+        val cached = distinctIds.mapNotNull { testCache(it) }
+
+        if (cached.size == distinctIds.size) {
             return SizedCollection(cached)
         }
-        return wrapRows(searchQuery(Op.build {table.id inList ids}))
+
+        val toLoad = distinctIds - cached.map { it.id }
+        val loaded = wrapRows(searchQuery(Op.build { table.id inList (toLoad) }))
+        if (cached.isEmpty()) {
+            return loaded
+        } else {
+            return SizedCollection(cached + loaded.toList())
+        }
     }
 
     fun forIds(ids: List<ID>) : SizedIterable<T> = forEntityIds(ids.map {EntityID (it, table)})
@@ -672,7 +683,7 @@ abstract class ImmutableCachedEntityClass<ID:Any, T: Entity<ID>>(table: IdTable<
             for(r in super.all()) {  /* force iteration to initialize lazy collection */ }
             _cachedValues = transactionCache.data[table]
         } else {
-            transactionCache.data.getOrPut(table) { _cachedValues!! }
+            transactionCache.data[table] = _cachedValues!!
         }
 
         return transactionCache

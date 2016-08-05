@@ -50,7 +50,7 @@ class Database private constructor(val connector: () -> Connection) {
 
         fun connect(datasource: DataSource, manager: (Database) -> TransactionManager = { ThreadLocalTransactionManager(it) }): Database {
             return Database { datasource.connection!! }.apply {
-                TransactionManager.manager = manager(this)
+                TransactionManager._manager = manager(this)
             }
         }
 
@@ -59,7 +59,7 @@ class Database private constructor(val connector: () -> Connection) {
             Class.forName(driver).newInstance()
 
             return Database { DriverManager.getConnection(url, user, password) }.apply {
-                TransactionManager.manager = manager(this)
+                TransactionManager._manager = manager(this)
             }
         }
     }
